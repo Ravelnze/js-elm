@@ -9,6 +9,7 @@ import Bootstrap.CDN as CDN
 import Bootstrap.Navbar as Navbar
 import Bootstrap.Grid as Grid
 import Bootstrap.Grid.Col as Col
+import Bootstrap.Grid.Row as Row
 import Bootstrap.Card as Card
 import Bootstrap.Button as Button
 import Bootstrap.ListGroup as Listgroup
@@ -34,8 +35,8 @@ type alias Model =
 
 type Page
     = Home
-    | GettingStarted
-    | Modules
+    | Reception
+    | Music
     | NotFound
 
 
@@ -98,86 +99,115 @@ routeParser : UrlParser.Parser (Page -> a) a
 routeParser =
     UrlParser.oneOf
         [ UrlParser.map Home UrlParser.top
-        , UrlParser.map GettingStarted (UrlParser.s "getting-started")
-        , UrlParser.map Modules (UrlParser.s "modules")
+        , UrlParser.map Reception (UrlParser.s "reception")
+        , UrlParser.map Music (UrlParser.s "music")
         ]
 
 
 view : Model -> Html Msg
 view model =
-
     div []
         [ CDN.stylesheet
+        , customStyle
         , menu model
         , mainContent model
         , modal model
         ]
 
 
+customStyle : Html msg
+customStyle = 
+    node "link"
+        [ rel "stylesheet" 
+        , href "css/site.css"
+        ]
+        []
+
+
+header : Model -> Html Msg
+header model = 
+    Grid.row [ Row.attrs [ class "text-center", class "page-header" ] ]
+        [ Grid.col [ Col.attrs [ class "" ] ] 
+            [ h1 
+                [ class "tangerine-header" 
+                , title "Wedding DJ & Guitarist"
+                ] 
+                [ text "John Sutcliffe" ] 
+            , h4 []
+                 [ a [ href "http://www.easyweddings.com.au/WeddingMusic/Perth/JohnSutcliffeWeddingGuitaristandDJ/"
+                     , target "_blank" 
+                     ] 
+                     [ text "Wedding DJ & Guitarist" ] 
+                 ]
+            ]
+        ]
+
 menu : Model -> Html Msg
 menu model =
     Navbar.config NavMsg
-        |> Navbar.withAnimation
-        |> Navbar.container
-        |> Navbar.brand [ href "#" ] [ text "Elm Bootstrap" ]
+        |> Navbar.brand 
+            [ href "#"
+            , class "tangerine-header" 
+            , title "Wedding DJ & Guitarist"
+            ] 
+            [ text "John Sutcliffe" ]
         |> Navbar.items
-            [ Navbar.itemLink [ href "#getting-started" ] [ text "Getting started" ]
-            , Navbar.itemLink [ href "#modules" ] [ text "Modules" ]
+            [ Navbar.itemLink [ href "#" ] [ text "Home" ]
+            , Navbar.itemLink [ href "#reception" ] [ text "Reception" ]
+            , Navbar.itemLink [ href "#music" ] [ text "Music" ]
             ]
+        |> Navbar.customItems [
+            Navbar.textItem 
+                [] 
+                [ a 
+                    [ href "http://www.easyweddings.com.au/WeddingMusic/Perth/JohnSutcliffeWeddingGuitaristandDJ/" 
+                    , target "_blank"
+                    , class "nav-right" 
+                    ] 
+                    [ text "Easy Weddings" ] 
+                ]
+        ]
         |> Navbar.view model.navState
 
 
 mainContent : Model -> Html Msg
 mainContent model =
-    Grid.container [] <|
+    Grid.containerFluid [] <|
         case model.page of
             Home ->
-                pageHome model
+                welcome model
 
-            GettingStarted ->
-                pageGettingStarted model
+            Reception ->
+                pageReception model
 
-            Modules ->
-                pageModules model
+            Music ->
+                pageMusic model
 
             NotFound ->
                 pageNotFound
 
 
-pageHome : Model -> List (Html Msg)
-pageHome model =
-    [ h1 [] [ text "Home" ]
-    , Grid.row []
-        [ Grid.col []
-            [ Card.config [ Card.outlinePrimary ]
-                |> Card.headerH4 [] [ text "Getting started" ]
-                |> Card.block []
-                    [ Card.text [] [ text "Getting started is real easy. Just click the start button." ]
-                    , Card.custom <|
-                        Button.linkButton
-                            [ Button.primary, Button.attrs [ href "#getting-started" ] ]
-                            [ text "Start" ]
-                    ]
-                |> Card.view
+welcome : Model -> List (Html Msg)
+welcome model =
+    [ Grid.row []
+        [ Grid.col 
+            [ Col.attrs 
+                [ class "black-bg"
+                , class "remove-padding"
+                ] 
             ]
-        , Grid.col []
-            [ Card.config [ Card.outlineDanger ]
-                |> Card.headerH4 [] [ text "Modules" ]
-                |> Card.block []
-                    [ Card.text [] [ text "Check out the modules overview" ]
-                    , Card.custom <|
-                        Button.linkButton
-                            [ Button.primary, Button.attrs [ href "#modules" ] ]
-                            [ text "Module" ]
-                    ]
-                |> Card.view
+            [ img 
+                [ class "img-responsive"
+                , src "img/Cover.png"
+                ] 
+                []
             ]
         ]
     ]
 
 
-pageGettingStarted : Model -> List (Html Msg)
-pageGettingStarted model =
+pageReception : Model -> List (Html Msg)
+pageReception model =
     [ h2 [] [ text "Getting started" ]
     , Button.button
         [ Button.success
@@ -189,8 +219,8 @@ pageGettingStarted model =
     ]
 
 
-pageModules : Model -> List (Html Msg)
-pageModules model =
+pageMusic : Model -> List (Html Msg)
+pageMusic model =
     [ h1 [] [ text "Modules" ]
     , Listgroup.ul
         [ Listgroup.li [] [ text "Alert" ]
@@ -210,7 +240,7 @@ pageNotFound =
 modal : Model -> Html Msg
 modal model =
     Modal.config ModalMsg
-        |> Modal.small
+        |> Modal.large
         |> Modal.h4 [] [ text "Getting started ?" ]
         |> Modal.body []
             [ Grid.containerFluid []
