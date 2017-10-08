@@ -368,13 +368,129 @@ pageContact model =
         ]
     , Grid.row []
         [ Grid.col [ Col.xs1, Col.sm2 ] []
-        , Grid.col [ Col.xs11, Col.sm8 ]
+        , Grid.col [ Col.xs11, Col.sm6 ]
             [ fieldset
                 []
                 [ legend 
                     []
                     [ text "Send John an enquiry for an obligation free quote" ]
+                , label
+                    [ class "control-label" ]
+                    [ text "Name" ]
+                , Grid.row []
+                    [ Grid.col [ Col.sm6, Col.attrs [ class "form-group" ] ]
+                        [ input
+                            [ id "id_first_name" 
+                            , name "first_name" 
+                            , required True
+                            , placeholder "First Name"
+                            , class "input-required textinput textInput form-control"
+                            , maxlength 30
+                            ]
+                            []
+                        ]
+                    , Grid.col [ Col.sm6, Col.attrs [ class "form-group" ]  ]
+                        [ input
+                            [ id "id_last_name" 
+                            , name "last_name" 
+                            , required True
+                            , placeholder "Last Name"
+                            , class "input-required textinput textInput form-control"
+                            , maxlength 30
+                            ]
+                            []
+                        ]
+                    ]
+                , label 
+                    [ class "control-label" ] 
+                    [ text "Contact Details" ]
+                , Grid.row []
+                    [ Grid.col [ Col.sm6, Col.attrs [ class "form-group" ]  ]
+                        [ input
+                            [ id "id_email_contact" 
+                            , name "email_contact" 
+                            , required True
+                            , placeholder "Email Address"
+                            , class "input-required emailinput form-control"
+                            , maxlength 254
+                            ]
+                            []
+                        ]
+                    , Grid.col [ Col.sm6, Col.attrs [ class "form-group" ]  ]
+                        [ input
+                            [ id "id_phone_contact" 
+                            , name "phone_contact" 
+                            , required True
+                            , placeholder "Phone Number"
+                            , class "textinput form-control"
+                            , maxlength 10
+                            ]
+                            []
+                        ]
+                    ]
+                , label 
+                    [ class "control-label" ] 
+                    [ text "Wedding Details" ]
+                , Grid.row []
+                    [ Grid.col [ Col.sm6, Col.attrs [ class "form-group" ]  ]
+                        [ input
+                            [ id "id_venue" 
+                            , name "venue" 
+                            , required True
+                            , placeholder "Venue Name"
+                            , class "dateinput form-control"
+                            , maxlength 254
+                            ]
+                            []
+                        ]
+                    , Grid.col [ Col.sm6, Col.attrs [ class "form-group" ] ]
+                        [ input
+                            [ id "id_wedding_date" 
+                            , name "wedding_date" 
+                            , required True
+                            , placeholder "Wedding Date"
+                            , class "phoneinput form-control"
+                            , maxlength 10
+                            ]
+                            []
+                        ]
+                    ]
+                , label 
+                    [ class "control-label" ] 
+                    [ text "Comments/Questions" ]
+                , Grid.row []
+                    [ Grid.col [ Col.attrs [ class "form-group" ] ]
+                        [ textarea
+                            [ id "id_comments" 
+                            , name "comments" 
+                            , required True
+                            , placeholder "Anything else you would like to know?"
+                            , class "textarea form-control"
+                            , rows 10
+                            , cols 40
+                            ]
+                            []
+                        ]
+                    ]
+                , Grid.row []
+                    [ Grid.col [ Col.attrs [ class "form-group" ] ] 
+                        [ div 
+                            [ class "buttonHolder" 
+                            , type_ "submit"
+                            ] 
+                            [ button 
+                                [ class "btn btn-default" ] 
+                                [ text "Submit" ] 
+                            ] 
+                        ] 
+                    ]
                 ]
+            ]
+        , Grid.col [ Col.sm3 ] 
+            [ img 
+                [ class "img-fluid rounded-circle" 
+                , src "img/Contact.jpg" ] 
+                []
             ]
         ] 
     ]
