@@ -99,10 +99,10 @@ html {
     position: relative;
     min-height: 100%;
 }
-body {
+.main-body {
     /* Margin bottom by footer height */
-    margin-bottom: 130px;
-    background-color: #f8f8f8;
+    margin-bottom: 80px;
+    background-color: #fbfbfb;
 }
 
 .footer {
@@ -111,13 +111,14 @@ body {
     bottom: 0;
     width: 100%;
     /* Set the fixed height of the footer here */
-    height: 130px;
+    height: 80px;
+    line-height: 80px;
     color: #767676;
     background-color: black;
 }
 
 .footer p {
-    font-size: 1.1rem;
+    font-size: 0.8rem;
     padding-bottom: 5px;
     text-align: center;
 }
@@ -126,6 +127,12 @@ body {
     text-decoration: none;
     color: #b2b2b2;
 }
+
+.footer p a:hover {
+    text-decoration: none;
+    color: #b2b2b2;
+}
+
 
 .black-bg {
     background-color: black;
@@ -147,16 +154,20 @@ body {
     padding-bottom: 20px;
 }
 
+.upper-pad {
+    padding-top: 20px;
+}
+
 .non-justified {
     text-align: left !important;
 }
 
 .md-text {
-    font-size: medium;
+    font-size: large;
 }
 
 .lg-text {
-    font-size: large;
+    font-size: larger;
 }
 
 p {
@@ -206,4 +217,8 @@ h4.panel-title {
 
 ::-moz-selection {
   background: #fff3e5; /* Gecko Browsers */
+}
+
+legend {
+    border-bottom: 1px solid #e5e5e5;
 }
