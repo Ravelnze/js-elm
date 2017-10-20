@@ -14,6 +14,7 @@ import Bootstrap.Modal as Modal
 import Bootstrap.Carousel as Carousel exposing (defaultStateOptions)
 import Bootstrap.Carousel.Slide as Slide
 import Bootstrap.Form as Form
+import DatePicker exposing (defaultSettings)
 
 
 main : Program Never Model Msg
@@ -36,8 +37,9 @@ type alias Model =
     , email : String
     , phone : Int
     , venue : String
-    -- , date : Date
+    , date : Maybe Date
     , comments : String 
+    , datePicker : DatePicker.DatePicker
     }
 
 
@@ -55,6 +57,9 @@ init location =
         ( navState, navCmd ) =
             Navbar.initialState NavMsg
 
+        ( datePicker, datePickerCmd ) = 
+            DatePicker.init
+
         ( model, urlCmd ) =
             urlUpdate location 
                 { navState = navState
@@ -69,11 +74,14 @@ init location =
                 , email = ""
                 , phone = 0
                 , venue = ""
-                -- , date = date???
+                , date = Nothing
                 , comments = ""
+                , datePicker = datePicker
                 }
     in
-        ( model, Cmd.batch [ urlCmd, navCmd ] )
+        ( 
+            model, Cmd.batch [ urlCmd, navCmd, Cmd.map SetDatePicker datePickerCmd ] 
+        )
 
 
 type Msg
@@ -81,6 +89,7 @@ type Msg
     | NavMsg Navbar.State
     | CarouselMsg Carousel.Msg
     | ModalMsg Modal.State
+    | SetDatePicker DatePicker.Msg
 
 
 subscriptions : Model -> Sub Msg
@@ -90,9 +99,16 @@ subscriptions model =
     , Carousel.subscriptions model.carouselState CarouselMsg
     ]
 
+datePickerSettings : DatePicker.Settings
+datePickerSettings = 
+    { defaultSettings
+        | inputClassList = [ ( "form-control", True ) ]
+        , inputId = Just "datepicker"
+    }
+
 
 update : Msg -> Model -> ( Model, Cmd Msg )
-update msg model =
+update msg ({ datePicker } as model) =
     case msg of
         UrlChange location ->
             urlUpdate location model
@@ -111,6 +127,25 @@ update msg model =
             ( { model | modalState = state }
             , Cmd.none
             )
+
+        SetDatePicker msg ->
+            let
+                ( newDatePicker, datePickerCmd, dateEvent ) =
+                    DatePicker.update datePickerSettings msg datePicker
+
+                date =
+                    case dateEvent of
+                        Nothing ->
+                            model.date
+
+                        date ->
+                            date
+            in
+                { model
+                    | date = date
+                    , datePicker = newDatePicker
+                }
+                    ! [ Cmd.map SetDatePicker datePickerCmd ]
 
 
 urlUpdate : Navigation.Location -> Model -> ( Model, Cmd Msg )
